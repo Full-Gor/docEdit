@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ArrowLeft, Save, Share, Eye, Calendar, Building, Sparkles, ChevronRight } from 'lucide-react-native';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width } = Dimensions.get('window');
 
@@ -22,6 +23,41 @@ export default function PressReleaseTemplate() {
 
   const togglePreview = () => {
     setIsPreview(!isPreview);
+  };
+
+  const saveDocument = async () => {
+    try {
+      const documentData = {
+        id: Date.now().toString(),
+        type: 'press-release',
+        title,
+        subtitle,
+        date,
+        location,
+        content,
+        contact,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      const existingDocuments = await AsyncStorage.getItem('documents');
+      const documents = existingDocuments ? JSON.parse(existingDocuments) : [];
+      documents.push(documentData);
+      await AsyncStorage.setItem('documents', JSON.stringify(documents));
+
+      Alert.alert(
+        'Sauvegarde réussie',
+        'Votre communiqué de presse a été sauvegardé localement.',
+        [{ text: 'OK' }]
+      );
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde:', error);
+      Alert.alert(
+        'Erreur',
+        'Impossible de sauvegarder le document. Veuillez réessayer.',
+        [{ text: 'OK' }]
+      );
+    }
   };
 
   if (isPreview) {
@@ -145,7 +181,7 @@ export default function PressReleaseTemplate() {
           <TouchableOpacity onPress={togglePreview} style={styles.actionButton}>
             <Eye size={22} color="#FFFFFF" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity onPress={saveDocument} style={styles.actionButton}>
             <Save size={22} color="#FFFFFF" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButton}>

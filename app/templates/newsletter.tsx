@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Dimensions, Platform } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Dimensions, Platform, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ArrowLeft, Save, Share, Eye, Mail, Image, Link, Sparkles, ChevronRight, Plus, X } from 'lucide-react-native';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width } = Dimensions.get('window');
 
@@ -26,6 +27,42 @@ export default function NewsletterTemplate() {
 
   const togglePreview = () => {
     setIsPreview(!isPreview);
+  };
+
+  const saveDocument = async () => {
+    try {
+      const documentData = {
+        id: Date.now().toString(),
+        type: 'newsletter',
+        title: subject,
+        company: companyName,
+        subject,
+        preheader,
+        mainTitle,
+        mainContent,
+        sections,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      const existingDocuments = await AsyncStorage.getItem('documents');
+      const documents = existingDocuments ? JSON.parse(existingDocuments) : [];
+      documents.push(documentData);
+      await AsyncStorage.setItem('documents', JSON.stringify(documents));
+
+      Alert.alert(
+        'Sauvegarde réussie',
+        'Votre newsletter a été sauvegardée localement.',
+        [{ text: 'OK' }]
+      );
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde:', error);
+      Alert.alert(
+        'Erreur',
+        'Impossible de sauvegarder le document. Veuillez réessayer.',
+        [{ text: 'OK' }]
+      );
+    }
   };
 
   const addSection = () => {
@@ -175,7 +212,7 @@ export default function NewsletterTemplate() {
           <TouchableOpacity onPress={togglePreview} style={styles.actionButton}>
             <Eye size={22} color="#FFFFFF" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity onPress={saveDocument} style={styles.actionButton}>
             <Save size={22} color="#FFFFFF" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButton}>

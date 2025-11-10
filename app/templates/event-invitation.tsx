@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowLeft, Save, Share, Eye, Calendar, MapPin, Clock, Users } from 'lucide-react-native';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function EventInvitationTemplate() {
   const [eventName, setEventName] = useState('');
@@ -21,6 +22,45 @@ export default function EventInvitationTemplate() {
 
   const togglePreview = () => {
     setIsPreview(!isPreview);
+  };
+
+  const saveDocument = async () => {
+    try {
+      const documentData = {
+        id: Date.now().toString(),
+        type: 'event-invitation',
+        title: eventName || 'Invitation sans titre',
+        company: eventType || 'Événement',
+        eventName,
+        eventType,
+        date,
+        time,
+        location,
+        description,
+        dresscode,
+        rsvp,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      const existingDocuments = await AsyncStorage.getItem('documents');
+      const documents = existingDocuments ? JSON.parse(existingDocuments) : [];
+      documents.push(documentData);
+      await AsyncStorage.setItem('documents', JSON.stringify(documents));
+
+      Alert.alert(
+        'Sauvegarde réussie',
+        'Votre invitation a été sauvegardée localement.',
+        [{ text: 'OK' }]
+      );
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde:', error);
+      Alert.alert(
+        'Erreur',
+        'Impossible de sauvegarder le document. Veuillez réessayer.',
+        [{ text: 'OK' }]
+      );
+    }
   };
 
   if (isPreview) {
@@ -95,7 +135,7 @@ export default function EventInvitationTemplate() {
           <TouchableOpacity onPress={togglePreview} style={styles.actionButton}>
             <Eye size={20} color="#FFFFFF" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity onPress={saveDocument} style={styles.actionButton}>
             <Save size={20} color="#FFFFFF" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButton}>

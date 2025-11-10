@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { FileText, Briefcase, Users, MessageSquare, Megaphone, Settings, Save } from 'lucide-react-native';
+import { FileText, Briefcase, Users, MessageSquare, Megaphone, ClipboardList, Save, Home } from 'lucide-react-native';
 
 export default function TabLayout() {
   return (
@@ -17,6 +17,15 @@ export default function TabLayout() {
           height: 60,
         },
       }}>
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Accueil',
+          tabBarIcon: ({ size, color }) => (
+            <Home size={size} color={color} />
+          ),
+        }}
+      />
       <Tabs.Screen
         name="institutional"
         options={{
@@ -65,9 +74,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="forms"
         options={{
-          title: 'Formulaires',
+          title: 'Documents',
           tabBarIcon: ({ size, color }) => (
-            <Settings size={size} color={color} />
+            <ClipboardList size={size} color={color} />
           ),
         }}
       />

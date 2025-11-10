@@ -67,6 +67,7 @@ export default function RootLayout() {
         <Stack.Screen name="templates/annual-review" options={{ headerShown: false }} />
         <Stack.Screen name="templates/annual-review-blank" options={{ headerShown: false }} />
         <Stack.Screen name="saved-documents" options={{ headerShown: false }} />
+        <Stack.Screen name="settings" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
       <StatusBar style="auto" />
