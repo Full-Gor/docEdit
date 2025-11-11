@@ -126,6 +126,108 @@ const templateChoice3Documents = [
   }
 ];
 
+const eventChoice4Documents = [
+  {
+    id: 1,
+    title: 'Invitation événement',
+    description: 'Template vide pour votre code personnalisé',
+    icon: Mail,
+    color: '#2563EB',
+    route: '/templates/event-invitation'
+  },
+  {
+    id: 2,
+    title: 'Programme conférence',
+    description: 'Template vide pour votre code personnalisé',
+    icon: Calendar,
+    color: '#10B981',
+    route: '/templates/conference-program'
+  },
+  {
+    id: 3,
+    title: 'Carte de vœux',
+    description: 'Template vide pour votre code personnalisé',
+    icon: Heart,
+    color: '#F97316',
+    route: '/templates/greeting-card'
+  },
+  {
+    id: 4,
+    title: 'Séminaire entreprise',
+    description: 'Template vide pour votre code personnalisé',
+    icon: Users,
+    color: '#8B5CF6',
+    route: '/templates/seminar-plan'
+  },
+  {
+    id: 5,
+    title: 'Lancement produit',
+    description: 'Template vide pour votre code personnalisé',
+    icon: Megaphone,
+    color: '#F59E0B',
+    route: '/templates/product-launch'
+  },
+  {
+    id: 6,
+    title: 'Soirée de gala',
+    description: 'Template vide pour votre code personnalisé',
+    icon: Award,
+    color: '#EF4444',
+    route: '/templates/gala-event'
+  }
+];
+
+const eventChoice5Documents = [
+  {
+    id: 1,
+    title: 'Invitation événement',
+    description: 'Template vide pour votre code personnalisé',
+    icon: Mail,
+    color: '#2563EB',
+    route: '/templates/event-invitation'
+  },
+  {
+    id: 2,
+    title: 'Programme conférence',
+    description: 'Template vide pour votre code personnalisé',
+    icon: Calendar,
+    color: '#10B981',
+    route: '/templates/conference-program'
+  },
+  {
+    id: 3,
+    title: 'Carte de vœux',
+    description: 'Template vide pour votre code personnalisé',
+    icon: Heart,
+    color: '#F97316',
+    route: '/templates/greeting-card'
+  },
+  {
+    id: 4,
+    title: 'Séminaire entreprise',
+    description: 'Template vide pour votre code personnalisé',
+    icon: Users,
+    color: '#8B5CF6',
+    route: '/templates/seminar-plan'
+  },
+  {
+    id: 5,
+    title: 'Lancement produit',
+    description: 'Template vide pour votre code personnalisé',
+    icon: Megaphone,
+    color: '#F59E0B',
+    route: '/templates/product-launch'
+  },
+  {
+    id: 6,
+    title: 'Soirée de gala',
+    description: 'Template vide pour votre code personnalisé',
+    icon: Award,
+    color: '#EF4444',
+    route: '/templates/gala-event'
+  }
+];
+
 export default function EventsScreen() {
   const [selectedTemplateChoice, setSelectedTemplateChoice] = useState(1);
 
@@ -138,15 +240,16 @@ export default function EventsScreen() {
   };
 
   const getCurrentDocuments = () => {
-    switch (selectedTemplateChoice) {
-      case 1:
-        return eventDocuments;
-      case 2:
-        return templateChoice2Documents;
-      case 3:
-        return templateChoice3Documents;
-      default:
-        return eventDocuments;
+    if (selectedTemplateChoice === 1) {
+      return eventDocuments;
+    } else if (selectedTemplateChoice === 2) {
+      return templateChoice2Documents;
+    } else if (selectedTemplateChoice === 3) {
+      return templateChoice3Documents;
+    } else if (selectedTemplateChoice === 4) {
+      return eventChoice4Documents;
+    } else {
+      return eventChoice5Documents;
     }
   };
 
@@ -219,6 +322,34 @@ export default function EventsScreen() {
                 selectedTemplateChoice === 3 && styles.templateChoiceTextActive
               ]}>
                 Choix 3
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.templateChoice,
+                selectedTemplateChoice === 4 && styles.templateChoiceActive
+              ]}
+              onPress={() => handleTemplateChoice(4)}
+            >
+              <Text style={[
+                styles.templateChoiceText,
+                selectedTemplateChoice === 4 && styles.templateChoiceTextActive
+              ]}>
+                Choix 4
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.templateChoice,
+                selectedTemplateChoice === 5 && styles.templateChoiceActive
+              ]}
+              onPress={() => handleTemplateChoice(5)}
+            >
+              <Text style={[
+                styles.templateChoiceText,
+                selectedTemplateChoice === 5 && styles.templateChoiceTextActive
+              ]}>
+                Choix 5
               </Text>
             </TouchableOpacity>
           </View>
@@ -334,13 +465,13 @@ const styles = StyleSheet.create({
   },
   templateChoices: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 6,
   },
   templateChoice: {
     flex: 1,
     backgroundColor: '#F8FAFC',
     borderRadius: 12,
-    padding: 12,
+    padding: 10,
     borderWidth: 1,
     borderColor: '#E2E8F0',
     alignItems: 'center',
@@ -350,7 +481,7 @@ const styles = StyleSheet.create({
     borderColor: '#2563EB',
   },
   templateChoiceText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
     color: '#64748B',
   },
